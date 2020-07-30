@@ -2,6 +2,18 @@
 
 require 'pry'
 
+def class_check(arg)
+  if arg.is_a?(Regexp)
+    my_select { |x| x.to_s.match(arg) }
+  elsif arg.is_a?(Class)
+    my_select { |x| x.is_a?(arg) }
+  elsif arg.is_a?(Module)
+    my_select { |x| x.is_a?(arg) }
+  else
+    my_select { |x| x == arg }
+  end
+end
+
 # This module is a representation of the enumerable methods!
 module Enumerable
   def my_each
@@ -41,33 +53,40 @@ module Enumerable
   def my_all?(arg = nil, &block)
     arr = to_a
     if !arg.nil?
-      arr.my_each { |x| return false unless x.match(arg) } if arg.is_a?(Regexp)
-      arr.my_each { |x| return false unless x.is_a?(arg) } if arg.is_a?(Class) || arg.is_a?(Module)
+      class_check(arg).to_a == arr
     elsif block_given?
       arr.my_select(&block).to_a.length == arr.length
     else
       arr.my_each { |x| return false unless x }
     end
-    true
+    
   end
 
-  def my_any?(&block)
+  def my_any?(arg = nil, &block)
     arr = to_a
     if !block_given?
-      !arr.my_all? { |x| x.nil? || x == false }
+      !arr.my_all? { |x| x.nil? || x == false } unless arg
+      arr.my_each { |x| return true if x.match(arg) } if arg.is_a?(Regexp)
+      arr.my_each { |x| return true if x.is_a?(arg) } if arg.is_a?(Class) || arg.is_a?(Module)
+      arr.my_each { |x| return true if arg == x } unless arg.is_a?(Regexp || Class || Module)
     else
       arr.my_select(&block).to_a.empty? ? false : true
     end
+    true
   end
 
-  def my_none?(&block)
+  def my_none?(arg= nil, &block)
     arr = to_a
 
     if !block_given?
       arr.my_all? { |x| x.nil? || x == false }
+      arr.my_each { |x| return false if x.match(arg) } if arg.is_a?(Regexp)
+      arr.my_each { |x| return false if x.is_a?(arg) } if arg.is_a?(Class) || arg.is_a?(Module)
+      arr.my_each { |x| return false if arg == x } unless arg.is_a?(Regexp || Class || Module)
     else
       arr.my_select(&block).to_a.empty? ? true : false
     end
+    true
   end
 
   def my_count(arg = nil, &block)
@@ -107,40 +126,6 @@ def multiply_els(arr)
   arr.my_inject(&:*)
 end
 
-arr = [52, 28, 31, 7, 28]
-
-arr_false = [52, nil, nil, false]
-
-obj = { "Sercan": 31, "Joe": 28, "Amita": 24 }
-
-# list = (0..9)
-
-# p(arr.my_select { |x| x > 100 })
-
-hash = Hash.new
-# p(%w(cat dog wombat).my_each_with_index { |item, index| hash[item] = index })
-
-# p(arr.my_count { |x| x == 28 })
-
-# p(arr.my_count(28))
-
-# p(obj.my_count { |_key, value| value == 31 })
-
-# p(arr_false.my_any?)
-
-# p(arr.my_count)
-
-# p(arr.my_none? { |x| x > 25 })
-
-# p(arr.my_map { |x| x * x })
-
-# p(obj.my_map { |_key, value| value > 25 })
-
-# p(arr_false.my_map { |x| x != false })
-
-# p(arr.my_inject(&:+))
-
-# p(multiply_els([2, 4, 5]))
-
-p %w[Marc Lac Jean].my_all?(/a/)
-
+p %w[Marc Luc Jean].my_all?(/j/)
+p %w[Marc Luc Jean].my_all?('Jean')
+p [2, 1, 6, 7, 4, 8, 10].my_all?(Integer)
