@@ -59,34 +59,27 @@ module Enumerable
     else
       arr.my_each { |x| return false unless x }
     end
-    
   end
 
   def my_any?(arg = nil, &block)
     arr = to_a
     if !block_given?
       !arr.my_all? { |x| x.nil? || x == false } unless arg
-      arr.my_each { |x| return true if x.match(arg) } if arg.is_a?(Regexp)
-      arr.my_each { |x| return true if x.is_a?(arg) } if arg.is_a?(Class) || arg.is_a?(Module)
-      arr.my_each { |x| return true if arg == x } unless arg.is_a?(Regexp || Class || Module)
+      class_check(arg).empty? ? false : true
     else
       arr.my_select(&block).to_a.empty? ? false : true
     end
-    true
   end
 
-  def my_none?(arg= nil, &block)
+  def my_none?(arg = nil, &block)
     arr = to_a
 
     if !block_given?
-      arr.my_all? { |x| x.nil? || x == false }
-      arr.my_each { |x| return false if x.match(arg) } if arg.is_a?(Regexp)
-      arr.my_each { |x| return false if x.is_a?(arg) } if arg.is_a?(Class) || arg.is_a?(Module)
-      arr.my_each { |x| return false if arg == x } unless arg.is_a?(Regexp || Class || Module)
+      arr.my_all? { |x| x.nil? || x == false } unless arg
+      class_check(arg).empty?
     else
       arr.my_select(&block).to_a.empty? ? true : false
     end
-    true
   end
 
   def my_count(arg = nil, &block)
@@ -126,6 +119,4 @@ def multiply_els(arr)
   arr.my_inject(&:*)
 end
 
-p %w[Marc Luc Jean].my_all?(/j/)
-p %w[Marc Luc Jean].my_all?('Jean')
-p [2, 1, 6, 7, 4, 8, 10].my_all?(Integer)
+
