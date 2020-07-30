@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 def class_check(arg)
   if arg.is_a?(Regexp)
     my_select { |x| x.to_s.match(arg) }
