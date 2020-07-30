@@ -104,19 +104,23 @@ module Enumerable
 
     if !block_given?
       memo = args[1] ? args[0] : arr[0]
-      arr.drop(1).my_each { |x| memo.send(args[0], x) } unless args[1]
-      arr.my_each { |x| memo.send(arg[1], x) } if args[1]
+      if args[1]
+        arr.my_each { |x| memo.send(arg[1], x) }
+      else
+        arr.drop(1).my_each { |x| memo.send(args[0], x) }
+      end
     else
       memo = args[0] || arr[0]
-      arr.drop(1).my_each { |x| memo = yield memo, x } unless args[0]
-      arr.my_each { |x| memo = yield memo, x } if args[0]
+      if args[0]
+        arr.my_each { |x| memo = yield memo, x }
+      else
+        arr.drop(1).my_each { |x| memo = yield memo, x }
+      end
     end
     memo
   end
 end
 
 def multiply_els(arr)
-  arr.my_inject(&:*)
+  arr.my_inject(&:+)
 end
-
-
