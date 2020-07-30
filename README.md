@@ -23,7 +23,7 @@ Every method has been tested on hashes, arrays and ranges to mirror the behaviou
 ## Live Demo
 
 [Live Demo Link](https://repl.it/@eypsrcnuygr/Enumerable-Methods-2#.replit) to the repl. <br>
-To chekc the code, navigate through the bin folder and check "main.rb".
+To check the code pres 'Ctrl Shift p' and open a new shell, navigate through the bin folder and run ```ruby main.rb```.
 
 ## Getting Started
 
