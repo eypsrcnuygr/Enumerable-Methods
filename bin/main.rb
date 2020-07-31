@@ -48,33 +48,41 @@ module Enumerable
 
   def my_all?(arg = nil, &block)
     arr = to_a
-    if !arg.nil?
+    if !arg.nil? && !block_given?
       class_check(arg).to_a == arr
     elsif block_given?
       arr.my_select(&block).to_a.length == arr.length
+    elsif arr.my_select { |x| x == false || x.nil? }.empty?
+      true
     else
-      arr.my_each { |x| return false unless x }
+      false
     end
   end
 
   def my_any?(arg = nil, &block)
     arr = to_a
-    if !block_given?
-      !arr.my_all? { |x| x.nil? || x == false } unless arg
-      class_check(arg).empty? ? false : true
-    else
+    if !arg.nil? && !block_given?
+      !class_check(arg).empty?
+    elsif block_given?
       !arr.my_select(&block).to_a.empty?
+    elsif arr.my_select { |x| x == false || x.nil? }.empty?
+      true
+    else
+      false
     end
   end
 
   def my_none?(arg = nil, &block)
     arr = to_a
 
-    if !block_given?
-      arr.my_all? { |x| x.nil? || x == false } unless arg
+    if !arg.nil? && !block_given?
       class_check(arg).empty?
-    else
+    elsif block_given?
       arr.my_select(&block).to_a.empty?
+    elsif arr.my_select { |x| x == false || x.nil? }.empty?
+      false
+    else
+      true
     end
   end
 
@@ -116,3 +124,8 @@ end
 def multiply_els(arr)
   arr.my_inject(:*)
 end
+
+false_array = [nil, false, nil, false]
+true_array = [1, true, 'hi', []]
+p false_array.my_none?
+p true_array.my_none?
