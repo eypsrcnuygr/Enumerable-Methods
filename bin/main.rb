@@ -65,10 +65,10 @@ module Enumerable
       !class_check(arg).empty?
     elsif block_given?
       !arr.my_select(&block).to_a.empty?
-    elsif arr.my_select { |x| x == false || x.nil? }.empty?
+    elsif arr.my_all? { |x| x == false || x.nil? }
       true
     else
-      false
+      !arr.my_select(&block).to_a.empty?
     end
   end
 
