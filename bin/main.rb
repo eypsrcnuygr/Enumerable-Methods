@@ -1,6 +1,14 @@
-# frozen_string_literal: true
-
-require 'pry'
+def class_check(arg)
+  if arg.is_a?(Regexp)
+    my_select { |x| x.to_s.match(arg) }
+  elsif arg.is_a?(Class)
+    my_select { |x| x.is_a?(arg) }
+  elsif arg.is_a?(Module)
+    my_select { |x| x.is_a?(arg) }
+  else
+    my_select { |x| x == arg }
+  end
+end
 
 # This module is a representation of the enumerable methods!
 module Enumerable
@@ -40,33 +48,41 @@ module Enumerable
 
   def my_all?(arg = nil, &block)
     arr = to_a
-    if !arg.nil?
-      arr.my_each { |x| return false unless x.match(arg) } if arg.is_a?(Regexp)
-      arr.my_each { |x| return false unless x.is_a?(arg) } if arg.is_a?(Class) || arg.is_a?(Module)
+    if !arg.nil? && !block_given?
+      class_check(arg).to_a == arr
     elsif block_given?
       arr.my_select(&block).to_a.length == arr.length
+    elsif arr.my_select { |x| x == false || x.nil? }.empty?
+      true
     else
-      arr.my_each { |x| return false unless x }
-    end
-    true
-  end
-
-  def my_any?(&block)
-    arr = to_a
-    if !block_given?
-      !arr.my_all? { |x| x.nil? || x == false }
-    else
-      arr.my_select(&block).to_a.empty? ? false : true
+      false
     end
   end
 
-  def my_none?(&block)
+  def my_any?(arg = nil, &block)
+    arr = to_a
+    if !arg.nil? && !block_given?
+      !class_check(arg).empty?
+    elsif block_given?
+      !arr.my_select(&block).to_a.empty?
+    elsif arr.my_all? { |x| x == false || x.nil? }
+      false
+    else
+      !arr.my_select(&block).to_a.empty?
+    end
+  end
+
+  def my_none?(arg = nil, &block)
     arr = to_a
 
-    if !block_given?
-      arr.my_all? { |x| x.nil? || x == false }
+    if !arg.nil? && !block_given?
+      class_check(arg).empty?
+    elsif block_given?
+      arr.my_select(&block).to_a.empty?
+    elsif arr.my_all? { |x| x == false || x.nil? }
+      true
     else
-      arr.my_select(&block).to_a.empty? ? true : false
+      arr.my_select(&block).to_a.empty?
     end
   end
 
@@ -77,70 +93,34 @@ module Enumerable
     !arg.nil? ? collector.push(arr.my_select { |x| x == arg }).flatten.length : arr.my_select(&block).to_a.length
   end
 
-  def my_map(&proc)
+  def my_map(proc = nil)
     collector = []
     arr = to_a
 
-    return to_enum unless block_given?
-
-    arr.length.times { |x| collector.push(proc.call(arr[x])) }
+    if proc
+      arr.length.times { |x| collector.push(proc.call(arr[x])) }
+    elsif block_given?
+      arr.length.times { |x| collector.push(yield arr[x]) }
+    else
+      return to_enum
+    end
     collector
   end
 
   def my_inject(*args)
     arr = to_a
-
-    if !block_given?
-      memo = args[1] ? args[0] : arr[0]
-      arr.drop(1).my_each { |x| memo.send(args[0], x) } unless args[1]
-      arr.my_each { |x| memo.send(arg[1], x) } if args[1]
+    arg = args[0].is_a?(Numeric) ? args[0] : arr[0]
+    inject_symbol = args.my_select { |x| x.class == Symbol }
+    offset = arg == arr[0] ? 1 : 0
+    if inject_symbol.empty?
+      0.upto(arr.length - (1 + offset)) { |x| arg = yield(arg, arr[x + offset]) }
     else
-      memo = args[0] || arr[0]
-      arr.drop(1).my_each { |x| memo = yield memo, x } unless args[0]
-      arr.my_each { |x| memo = yield memo, x } if args[0]
+      0.upto(arr.length - (1 + offset)) { |x| arg = arg.send(inject_symbol[0], arr[x + offset]) }
     end
-    memo
+    arg
   end
 end
 
 def multiply_els(arr)
-  arr.my_inject(&:*)
+  arr.my_inject(:*)
 end
-
-arr = [52, 28, 31, 7, 28]
-
-arr_false = [52, nil, nil, false]
-
-obj = { "Sercan": 31, "Joe": 28, "Amita": 24 }
-
-# list = (0..9)
-
-# p(arr.my_select { |x| x > 100 })
-
-hash = Hash.new
-# p(%w(cat dog wombat).my_each_with_index { |item, index| hash[item] = index })
-
-# p(arr.my_count { |x| x == 28 })
-
-# p(arr.my_count(28))
-
-# p(obj.my_count { |_key, value| value == 31 })
-
-# p(arr_false.my_any?)
-
-# p(arr.my_count)
-
-# p(arr.my_none? { |x| x > 25 })
-
-# p(arr.my_map { |x| x * x })
-
-# p(obj.my_map { |_key, value| value > 25 })
-
-# p(arr_false.my_map { |x| x != false })
-
-# p(arr.my_inject(&:+))
-
-# p(multiply_els([2, 4, 5]))
-
-p %w[Marc Lac Jean].my_all?(/a/)
-
