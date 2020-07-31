@@ -93,16 +93,16 @@ module Enumerable
     !arg.nil? ? collector.push(arr.my_select { |x| x == arg }).flatten.length : arr.my_select(&block).to_a.length
   end
 
-  def my_map(&proc)
+  def my_map(proc = nil)
     collector = []
     arr = to_a
 
-    return to_enum unless block_given?
-
     if proc
       arr.length.times { |x| collector.push(proc.call(arr[x])) }
+    elsif block_given?
+      arr.length.times { |x| collector.push(yield(x)) }
     else
-      arr.length.times { |x| collector.push(yield x) }
+      return to_enum
     end
     collector
   end
@@ -125,7 +125,10 @@ def multiply_els(arr)
   arr.my_inject(:*)
 end
 
-false_array = [nil, false, nil, false]
-true_array = [1, true, 'hi', []]
-p false_array.my_none?
-p true_array.my_none?
+
+array = [5, 8, 15, 25, 7]
+my_proc = proc {|num| num < 10 }
+p array.my_map(my_proc) {|num| num < 10 } 
+p array.my_map(my_proc)
+
+p array.my_map(my_proc) {|num| num < 10 } == array.my_map(&my_proc)
