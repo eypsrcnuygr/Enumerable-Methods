@@ -66,7 +66,7 @@ module Enumerable
     elsif block_given?
       !arr.my_select(&block).to_a.empty?
     elsif arr.my_all? { |x| x == false || x.nil? }
-      true
+      false
     else
       !arr.my_select(&block).to_a.empty?
     end
@@ -79,10 +79,10 @@ module Enumerable
       class_check(arg).empty?
     elsif block_given?
       arr.my_select(&block).to_a.empty?
-    elsif arr.my_select { |x| x == false || x.nil? }.empty?
-      false
-    else
+    elsif arr.my_all? { |x| x == false || x.nil? }
       true
+    else
+      arr.my_select(&block).to_a.empty?
     end
   end
 
@@ -124,3 +124,9 @@ end
 def multiply_els(arr)
   arr.my_inject(:*)
 end
+
+false_array = [nil, false, true, []]
+
+p false_array.my_none?
+
+p false_array.none?
