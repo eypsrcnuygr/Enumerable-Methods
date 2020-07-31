@@ -124,9 +124,3 @@ end
 def multiply_els(arr)
   arr.my_inject(:*)
 end
-
-false_array = [nil, false, true, []]
-
-p false_array.my_none?
-
-p false_array.none?
