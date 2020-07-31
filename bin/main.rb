@@ -63,7 +63,7 @@ module Enumerable
       !arr.my_all? { |x| x.nil? || x == false } unless arg
       class_check(arg).empty? ? false : true
     else
-      arr.my_select(&block).to_a.empty? ? false : true
+      !arr.my_select(&block).to_a.empty?
     end
   end
 
@@ -74,7 +74,7 @@ module Enumerable
       arr.my_all? { |x| x.nil? || x == false } unless arg
       class_check(arg).empty?
     else
-      arr.my_select(&block).to_a.empty? ? true : false
+      arr.my_select(&block).to_a.empty?
     end
   end
 
@@ -91,32 +91,28 @@ module Enumerable
 
     return to_enum unless block_given?
 
-    arr.length.times { |x| collector.push(proc.call(arr[x])) }
+    if proc
+      arr.length.times { |x| collector.push(proc.call(arr[x])) }
+    else
+      arr.length.times { |x| collector.push(yield x) }
+    end
     collector
   end
 
   def my_inject(*args)
     arr = to_a
-
-    if !block_given?
-      memo = args[1] ? args[0] : arr[0]
-      if args[1]
-        arr.my_each { |x| memo.send(arg[1], x) }
-      else
-        arr.drop(1).my_each { |x| memo.send(args[0], x) }
-      end
+    arg = args[0].is_a?(Numeric) ? args[0] : arr[0]
+    inject_symbol = args.my_select { |x| x.class == Symbol }
+    offset = arg == arr[0] ? 1 : 0
+    if inject_symbol.empty?
+      0.upto(arr.length - (1 + offset)) { |x| arg = yield(arg, arr[x + offset]) }
     else
-      memo = args[0] || arr[0]
-      if args[0]
-        arr.my_each { |x| memo = yield memo, x }
-      else
-        arr.drop(1).my_each { |x| memo = yield memo, x }
-      end
+      0.upto(arr.length - (1 + offset)) { |x| arg = arg.send(inject_symbol[0], arr[x + offset]) }
     end
-    memo
+    arg
   end
 end
 
 def multiply_els(arr)
-  arr.my_inject(&:+)
+  arr.my_inject(:*)
 end
