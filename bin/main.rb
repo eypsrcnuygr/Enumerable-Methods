@@ -100,7 +100,7 @@ module Enumerable
     if proc
       arr.length.times { |x| collector.push(proc.call(arr[x])) }
     elsif block_given?
-      arr.length.times { |x| collector.push(yield(x)) }
+      arr.length.times { |x| collector.push(yield arr[x]) }
     else
       return to_enum
     end
