@@ -124,11 +124,3 @@ end
 def multiply_els(arr)
   arr.my_inject(:*)
 end
-
-
-array = [5, 8, 15, 25, 7]
-my_proc = proc {|num| num < 10 }
-p array.my_map(my_proc) {|num| num < 10 } 
-p array.my_map(my_proc)
-
-p array.my_map(my_proc) {|num| num < 10 } == array.my_map(&my_proc)
