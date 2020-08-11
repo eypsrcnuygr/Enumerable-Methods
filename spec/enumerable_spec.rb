@@ -17,7 +17,9 @@ describe Enumerable do
     end
     it 'returns the sum of array ' do
       sum = 0
-      expect(array.my_each_with_index { |item| sum += item }).to eql(43)
+      array.my_each_with_index { |item| sum += item }
+      expect(sum).to eql(43)
     end
   end
+  describe '#'
 end
