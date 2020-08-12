@@ -14,7 +14,7 @@ describe Enumerable do
   end
   describe '#my_each_with_index' do
     it 'returns an enumerator when no block_given' do
-      expect(array.my_each).to be_instance_of(Enumerator)
+      expect(array.my_each_with_index).to be_instance_of(Enumerator)
     end
     it 'returns the sum of array ' do
       sum = 0
@@ -25,6 +25,9 @@ describe Enumerable do
   describe '#my_select' do
     it 'returns numbers > 5' do
       expect(array.my_select { |x| x > 5 }).to eql([7, 9, 8, 10])
+    end
+    it 'returns an empty array when the case is not satisfied' do
+      expect(array.my_select { |x| x > 15 }).to eql([])
     end
   end
   describe '#my_all?' do
