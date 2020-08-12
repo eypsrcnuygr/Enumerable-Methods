@@ -67,6 +67,7 @@ To get this project up and running, you must already have ruby installed on your
 👤 **Guy Gustave NIGABA**
 
 - Github: [@Guy-Gustave](https://github.com/Guy-Gustave)
+- Linkedin: [Guy-Gustave](https://www.linkedin.com/in/guy-gustave-nigaba-7988ba181/)
 - E-mail: [guymoustapha@gmail.com](guymoustapha@gmail.com)
 
 ## 🤝 Contributing
