@@ -3,6 +3,7 @@ require_relative '../bin/main.rb'
 describe Enumerable do
   let(:array) { [1, 3, 5, 7, 9, 8, 10] }
   let(:array_polly) { [1, 1, 5, 5, 5, 8, 8] }
+  let(:array_with_false) { [false, 5, 7, 'string', true] }
   describe '#my_each' do
     it 'returns an enumerator when no block_given' do
       expect(array.my_each).to be_instance_of(Enumerator)
@@ -33,6 +34,9 @@ describe Enumerable do
   describe '#my_all?' do
     it 'returns true if all items are true' do
       expect(array.my_all? { |el| el > 0 }).to eq(true)
+    end
+    it 'returns false if all items are not true' do
+      expect(array_with_false.my_all?).not_to eql(true)
     end
   end
 
