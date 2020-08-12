@@ -55,6 +55,11 @@ git clone git@github.com:eypsrcnuygr/Enumerable-Methods.git
 
 To get this project up and running, you must already have ruby installed on your computer.
 
+## Automated Tests
+
+There are 16 tests have been added to the repo. Those are all checking the implementation of the "new enumerable methods" with arrays.
+To run tests, clone repository, install 'rspec' and then run ```rspec``` in the local folder.
+
 ## Authors
 
 👤 **Eyüp Sercan UYGUR**
