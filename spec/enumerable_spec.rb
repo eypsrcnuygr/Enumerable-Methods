@@ -59,4 +59,18 @@ describe Enumerable do
       end
     end
   end
+
+  describe '#my_map' do
+    it 'returns a new array with block or proc called' do
+      checker = array.my_map { |x| x * 2 }
+      expect(checker) == [2, 6, 10, 14, 18, 16, 20]
+    end
+  end
+
+  describe '#my_inject' do
+    it 'return one element that is the result for the process' do
+      checker = array.my_inject(5) { |x, y| x + y }
+      expect(checker).to eql(48)
+    end
+  end
 end

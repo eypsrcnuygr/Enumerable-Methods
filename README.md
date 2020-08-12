@@ -15,10 +15,13 @@
 
 Every method has been tested on hashes, arrays and ranges to mirror the behaviour of the methods they were modelled from.
 
+And We have created a spec folder that is responsible for the tests and for all methods mentioned above tested with an array.
+
 ## Built With
 
 * Ruby
 * Rubocop
+* Rspec
 
 ## Live Demo
 
@@ -61,11 +64,16 @@ To get this project up and running, you must already have ruby installed on your
 - Linkedin: [eypsrcnuygr](https://www.linkedin.com/in/eypsrcnuygr/)
 - E-mail: [sercanuygur@gmail.com](sercanuygur@gmail.com)
 
+👤 **Guy Gustave NIGABA**
+
+- Github: [@Guy-Gustave](https://github.com/Guy-Gustave)
+- E-mail: [guymoustapha@gmail.com](guymoustapha@gmail.com)
+
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!
 
-Feel free to check the [issues page](https://github.com/eypsrcnuygr/Bubble-Sort/issues).
+Feel free to check the [issues page](https://github.com/eypsrcnuygr/Enumerable-Methods/issues).
 
 ## Show your support
 
