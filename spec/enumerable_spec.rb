@@ -4,6 +4,7 @@ describe Enumerable do
   let(:array) { [1, 3, 5, 7, 9, 8, 10] }
   let(:array_polly) { [1, 1, 5, 5, 5, 8, 8] }
   let(:array_with_false) { [false, 5, 7, 'string', true] }
+  let(:falsey_array) { [false, nil, false, nil] }
   describe '#my_each' do
     it 'returns an enumerator when no block_given' do
       expect(array.my_each).to be_instance_of(Enumerator)
@@ -45,12 +46,19 @@ describe Enumerable do
       checker = array.my_any? { |item| item > 5 }
       expect(checker).to eql(true)
     end
+    it 'returns false if all elements are falsey' do
+      expect(falsey_array.my_any?).to eql(false)
+    end
   end
 
   describe '#my_none?' do
     it 'returns true if all elements return false' do
       checker = array.my_none? { |item| item > 15 }
       expect(checker).to eql(true)
+    end
+    it 'returns false if at least one element return true' do
+      checker = array.my_none? { |item| item > 5 }
+      expect(checker).to eql(false)
     end
   end
 
@@ -70,7 +78,7 @@ describe Enumerable do
   describe '#my_map' do
     it 'returns a new array with block or proc called' do
       checker = array.my_map { |x| x * 2 }
-      expect(checker) == [2, 6, 10, 14, 18, 16, 20]
+      expect(checker).to eql [2, 6, 10, 14, 18, 16, 20]
     end
   end
 
