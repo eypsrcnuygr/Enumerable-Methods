@@ -5,6 +5,8 @@ describe Enumerable do
   let(:array_polly) { [1, 1, 5, 5, 5, 8, 8] }
   let(:array_with_false) { [false, 5, 7, 'string', true] }
   let(:falsey_array) { [false, nil, false, nil] }
+  let(:example_proc) { proc {|n| n % 2 == 0 }} 
+
   describe '#my_each' do
     it 'returns an enumerator when no block_given' do
       expect(array.my_each).to be_instance_of(Enumerator)
@@ -76,9 +78,13 @@ describe Enumerable do
   end
 
   describe '#my_map' do
+
     it 'returns a new array with block or proc called' do
       checker = array.my_map { |x| x * 2 }
       expect(checker).to eql [2, 6, 10, 14, 18, 16, 20]
+    end
+    it 'returns enumerator when no block given' do
+      expect(array.my_map).to be_and Enumerator
     end
   end
 
@@ -87,5 +93,6 @@ describe Enumerable do
       checker = array.my_inject(5) { |x, y| x + y }
       expect(checker).to eql(48)
     end
+    
   end
 end
