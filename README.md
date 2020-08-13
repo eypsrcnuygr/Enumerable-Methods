@@ -15,7 +15,7 @@
 
 Every method has been tested on hashes, arrays and ranges to mirror the behaviour of the methods they were modelled from.
 
-And We have created a spec folder that is responsible for the tests and for all methods mentioned above tested with an array.
+And We have created a spec folder that is responsible for the tests and for all methods mentioned above tested with arrays.
 
 ## Built With
 
@@ -49,14 +49,16 @@ git clone git@github.com:eypsrcnuygr/Enumerable-Methods.git
 
 5. Once the repository has been cloned, navigate through the bin folder and run ``` ruby main.rb```.
 
-6. to make test, run rspec: it will shows how many axamples, it means the cases tested and shows the number of failures, 0 if all tests pass.
-
 6. Enjoy
-
 
 ## Prerequisities
 
 To get this project up and running, you must already have ruby installed on your computer.
+
+## Automated Tests
+
+There are 20 tests have been added to the repo. Those are all checking the implementation of the "new enumerable methods" with arrays.
+To run tests, clone repository, install 'rspec' and then run ```rspec``` in the local folder.
 
 ## Authors
 
