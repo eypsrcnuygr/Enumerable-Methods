@@ -15,7 +15,7 @@
 
 Every method has been tested on hashes, arrays and ranges to mirror the behaviour of the methods they were modelled from.
 
-And We have created a spec folder that is responsible for the tests and for all methods mentioned above tested with arrays.
+And We have created a spec folder that is responsible for the tests and for all methods mentioned above tested with arrays and one proc variable.
 
 ## Built With
 
@@ -57,7 +57,7 @@ To get this project up and running, you must already have ruby installed on your
 
 ## Automated Tests
 
-There are 20 tests have been added to the repo. Those are all checking the implementation of the "new enumerable methods" with arrays.
+There are 20 tests have been added to the repo. Those are all checking the implementation of the "new enumerable methods" with arrays and one proc.
 To run tests, clone repository, install 'rspec' and then run ```rspec``` in the local folder.
 
 ## Authors
